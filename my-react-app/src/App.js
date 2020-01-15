@@ -5,41 +5,77 @@ import FollowerCard from "./FollowerCard";
 
 class App extends React.Component {
   constructor(){
-  super();
-  this.state = {
-    users:[],
-    followers:[]
-  };
+    super();
+    this.state = {
+      users:[],
+      followers:[]
+    };
   }
 
   componentDidMount(){
-  axios.get("https://api.github.com/users/Adammonast")
-  .then(response =>{
-    this.setState({
+    axios
+    .get("https://api.github.com/users/Adammonast")
+    .then(response => {
+      this.setState({
       users: [response.data]
     });
-    console.log('user res',response.data);
-  })
-  .catch(error=>{
-    console.log("error msg",error);
-  })
 
-  const followers = ["debauchery1st", "anamonteiro430", "acarrillo3", "PHONGdotTech", "KonstadinosAngelis"
-  ];
+    const data = response.data;
+    return data;
 
-  followers.map(followers => {
-    axios.get(`https://api.github.com/users/${followers}`)
-  .then(response =>{
-    this.setState({
-      followers: [response.data]
-    });
-    console.log('Follower res', response.data);
-  })
-  .catch(error=>{
-    console.log("error follower msg", error);
-  })
-  })
-  }
+    // console.log('response data: ',response.data);
+
+    })
+
+    .then(response => {
+      console.log("response 2: ", response)
+      axios
+      .get(`${response.followers_url}`)
+      .then(response =>{
+        console.log('Follower response data: ', response.data);
+        this.setState({
+        followers: [...response.data]
+      });
+
+    })
+    
+    // followers_url.map(followers => {
+    //   axios
+    //   .get(`${users.data.followers_url}`)
+    //   .then(response =>{
+    //     console.log('Follower response data: ', response.data);
+    //     this.setState({
+    //     followers: [response.data]
+    //   });
+
+    .catch(error=>{
+      console.log("error follower msg", error);
+    })
+    })
+
+    .catch(error=>{
+      console.log("error msg",error);
+    })
+
+    // const followers = ["debauchery1st", "anamonteiro430", "acarrillo3", "PHONGdotTech", "KonstadinosAngelis"
+    // ];
+
+    // followers_url.map(followers => {
+    //   axios
+    //   .get(`${users.data.followers_url}`)
+    //   .then(response =>{
+    //     console.log('Follower response data: ', response.data);
+    //     this.setState({
+    //     followers: [response.data]
+    //   });
+
+    // })
+
+    // .catch(error=>{
+    //   console.log("error follower msg", error);
+    // })
+  // })
+}
   
   render(){
     return (
